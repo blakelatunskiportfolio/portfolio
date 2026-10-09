@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blake Latunski — Game Producer & PM</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --text: #2C2C2B;
+    --secondary: #7D7A75;
+    --canvas: #FFFFFF;
+    --soft: #F9F8F7;
+    --surface2: #F0EFED;
+    --border: #E6E5E3;
+    --accent: #2783DE;
+    --accent-soft: #E5F2FC;
+    --green: #46A171;
+    --green-soft: #E8F1EC;
+    --orange: #D5803B;
+    --orange-soft: #FBEBDE;
+    --red: #E56458;
+    --red-soft: #FCE9E7;
+    --radius: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--canvas);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; color: var(--text); text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--secondary); text-decoration: none; transition: color .15s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  #hero {
+    padding: 88px 48px 64px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 48px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 600;
+    padding: 4px 12px; border-radius: 100px;
+    margin-bottom: 16px; letter-spacing: 0.3px;
+  }
+  .hero-title {
+    font-size: clamp(34px, 4.5vw, 54px);
+    font-weight: 800; letter-spacing: -1.5px;
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub {
+    font-size: 17px; color: var(--secondary);
+    max-width: 500px; line-height: 1.65;
+    margin-bottom: 32px;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 10px 22px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 600;
+    text-decoration: none; transition: all .15s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #1a6fc2; }
+  .btn-secondary { background: var(--surface2); color: var(--text); }
+  .btn-secondary:hover { background: var(--border); }
+  .hero-avatar {
+    width: 130px; height: 130px; border-radius: 50%;
+    background: linear-gradient(135deg, #2783DE 0%, #a855f7 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; flex-shrink: 0;
+    box-shadow: 0 8px 32px rgba(39,131,222,0.2);
+  }
+
+  /* STATS */
+  .stats-bar { background: var(--soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stats-inner {
+    max-width: 980px; margin: 0 auto;
+    padding: 28px 48px;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; text-align: center;
+  }
+  .stat-num { font-size: 30px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
+  .stat-label { font-size: 13px; color: var(--secondary); margin-top: 2px; }
+
+  /* SECTION */
+  .section-wrap { max-width: 980px; margin: 0 auto; padding: 80px 48px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .section-title { font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; letter-spacing: -0.7px; margin-bottom: 10px; }
+  .section-sub { font-size: 15px; color: var(--secondary); max-width: 540px; margin-bottom: 48px; line-height: 1.65; }
+
+  /* CASE STUDY CARD */
+  .case-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .case-header {
+    padding: 32px 36px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 20px;
+  }
+  .case-number {
+    font-size: 11px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px; border-radius: 6px;
+    white-space: nowrap; flex-shrink: 0; margin-top: 3px;
+  }
+  .case-header-text h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 4px; }
+  .case-header-text p { font-size: 14px; color: var(--secondary); }
+  .case-meta-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .pill {
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+  }
+  .pill-blue { background: var(--accent-soft); color: var(--accent); }
+  .pill-gray { background: var(--surface2); color: var(--secondary); }
+  .pill-green { background: var(--green-soft); color: var(--green); }
+  .pill-orange { background: var(--orange-soft); color: var(--orange); }
+  .pill-red { background: var(--red-soft); color: var(--red); }
+
+  .case-body { padding: 36px; }
+
+  /* ─── PROJECT 1: ROADMAP ─── */
+  .roadmap { display: flex; flex-direction: column; gap: 0; }
+  .roadmap-phase {
+    display: grid; grid-template-columns: 160px 1fr;
+    gap: 0;
+  }
+  .phase-left {
+    display: flex; flex-direction: column; align-items: center;
+    padding-right: 24px; padding-top: 4px;
+  }
+  .phase-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--accent-soft);
+    flex-shrink: 0;
+    z-index: 1;
+    margin-top: 2px;
+  }
+  .phase-line {
+    width: 2px; flex: 1;
+    background: var(--border);
+    margin: 4px 0;
+  }
+  .phase-label {
+    text-align: right;
+    font-size: 13px; font-weight: 700;
+    color: var(--text);
+    padding-right: 16px;
+    padding-top: 2px;
+    white-space: nowrap;
+  }
+  .phase-right {
+    padding: 0 0 36px 0;
+  }
+  .phase-duration {
+    font-size: 12px; color: var(--accent);
+    font-weight: 600; margin-bottom: 6px;
+  }
+  .phase-right h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .phase-right p { font-size: 14px; color: var(--secondary); line-height: 1.65; margin-bottom: 10px; }
+  .producer-manages {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-top: 4px;
+  }
+  .producer-manages-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--secondary); margin-bottom: 8px;
+  }
+  .producer-manages ul { padding-left: 16px; }
+  .producer-manages li { font-size: 13px; color: var(--text); line-height: 1.7; }
+
+  /* ─── PROJECT 2: TEAM + BACKLOG ─── */
+  .team-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; margin-bottom: 40px;
+  }
+  .team-member {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    text-align: center;
+  }
+  .team-role-icon { font-size: 24px; margin-bottom: 6px; }
+  .team-role-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .team-role-count { font-size: 12px; color: var(--secondary); }
+
+  .sprint-info {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+    margin-bottom: 32px;
+  }
+  .sprint-stat {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+  }
+  .sprint-stat-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--secondary); margin-bottom: 4px; }
+  .sprint-stat-value { font-size: 18px; font-weight: 800; }
+
+  .backlog-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+  .backlog-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .backlog-table th {
+    background: var(--soft); text-align: left;
+    padding: 11px 16px; font-size: 11px;
+    font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .backlog-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .backlog-table tr:last-child td { border-bottom: none; }
+  .backlog-table tr:hover td { background: var(--soft); }
+  .status-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 100px;
+    white-space: nowrap;
+  }
+  .status-done { background: var(--green-soft); color: var(--green); }
+  .status-inprogress { background: var(--accent-soft); color: var(--accent); }
+  .status-notstarted { background: var(--surface2); color: var(--secondary); }
+  .status-blocked { background: var(--red-soft); color: var(--red); }
+  .status-review { background: var(--orange-soft); color: var(--orange); }
+  .priority-high { color: var(--red); font-weight: 700; }
+  .priority-med { color: var(--orange); font-weight: 700; }
+  .priority-low { color: var(--secondary); font-weight: 600; }
+  .epic-tag {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+    white-space: nowrap;
+  }
+  .epic-combat { background: #fde8e8; color: #c0392b; }
+  .epic-ui { background: #e8f0fd; color: #2c5bae; }
+  .epic-ai { background: #f0e8fd; color: #6c2bae; }
+  .epic-level { background: #e8fdf0; color: #1a7a40; }
+  .epic-audio { background: #fdf5e8; color: #a0620b; }
+  .epic-perf { background: #f5f5f5; color: #555; }
+
+  /* ─── PROJECT 3: VERTICAL SLICE ─── */
+  .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .vs-block {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .vs-block h3 { font-size: 14px; font-weight: 800; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .vs-block ul { padding-left: 16px; }
+  .vs-block li { font-size: 13px; color: var(--text); line-height: 1.9; }
+  .vs-block p { font-size: 13px; color: var(--secondary); line-height: 1.65; }
+
+  .milestone-list { display: flex; flex-direction: column; gap: 10px; }
+  .milestone-item {
+    display: grid; grid-template-columns: 90px 1fr auto;
+    align-items: center; gap: 16px;
+    padding: 14px 16px;
+    background: var(--canvas); border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .milestone-date { font-size: 12px; font-weight: 700; color: var(--accent); }
+  .milestone-name { font-size: 14px; font-weight: 700; }
+  .milestone-desc { font-size: 12px; color: var(--secondary); margin-top: 2px; }
+
+  .risk-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; }
+  .risk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .risk-table th {
+    background: var(--soft); text-align: left;
+    padding: 10px 14px; font-size: 11px;
+    font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .risk-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .risk-table tr:last-child td { border-bottom: none; }
+
+  .sprint-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; }
+  .sprint-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sprint-table th {
+    background: var(--soft); text-align: left;
+    padding: 10px 14px; font-size: 11px;
+    font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .sprint-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 13px; }
+  .sprint-table tr:last-child td { border-bottom: none; }
+
+  .allocation-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-bottom: 24px; }
+  .alloc-card {
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 12px; text-align: center;
+  }
+  .alloc-icon { font-size: 22px; margin-bottom: 6px; }
+  .alloc-discipline { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .alloc-count { font-size: 11px; color: var(--secondary); }
+
+  .dod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .dod-block {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;
+  }
+  .dod-block h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--accent); }
+  .dod-block li { font-size: 12px; color: var(--text); line-height: 1.8; }
+  .dod-block ul { padding-left: 14px; }
+
+  .process-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .process-block { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .process-block h4 { font-size: 14px; font-weight: 800; margin-bottom: 12px; }
+  .process-step {
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .step-num {
+    font-size: 11px; font-weight: 800;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-text { font-size: 13px; color: var(--text); line-height: 1.55; }
+
+  /* SKILLS */
+  .skills-bg { background: var(--soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .skill-group {
+    background: var(--canvas); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+  }
+  .skill-icon { font-size: 26px; margin-bottom: 10px; }
+  .skill-group-name { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-pill { font-size: 12px; padding: 4px 11px; background: var(--surface2); border-radius: 100px; color: var(--secondary); }
+
+  /* CONTACT */
+  .contact-wrap { text-align: center; padding: 88px 48px; max-width: 600px; margin: 0 auto; }
+  .contact-wrap .section-sub { margin: 0 auto 32px; }
+  .contact-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+  footer { border-top: 1px solid var(--border); padding: 24px 48px; text-align: center; font-size: 13px; color: var(--secondary); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    #hero { grid-template-columns: 1fr; padding: 48px 20px 36px; gap: 24px; }
+    .hero-avatar { width: 72px; height: 72px; font-size: 28px; }
+    .stats-inner { padding: 20px; grid-template-columns: repeat(2,1fr); }
+    .section-wrap { padding: 48px 20px; }
+    .case-header { padding: 20px; flex-direction: column; }
+    .case-body { padding: 20px; }
+    .roadmap-phase { grid-template-columns: 120px 1fr; }
+    .team-grid { grid-template-columns: repeat(2,1fr); }
+    .vs-grid { grid-template-columns: 1fr; }
+    .allocation-grid { grid-template-columns: repeat(3,1fr); }
+    .dod-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .sprint-info { grid-template-columns: 1fr; }
+    footer { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Blake Latunski</a>
+  <ul class="nav-links">
+    <li><a href="#case1">AAA Breakdown</a></li>
+    <li><a href="#case2">Sprint Plan</a></li>
+    <li><a href="#case3">Vertical Slice</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div>
+    <div class="hero-tag">Video Game Producer &amp; Project Manager</div>
+    <h1 class="hero-title">Shipping games,<br/><span>building teams.</span></h1>
+    <p class="hero-sub">I lead cross-functional teams from concept to ship — balancing creative ambition with production reality to deliver games players love. Below are three production case studies that show how I think.</p>
+    <div class="hero-ctas">
+      <a href="#case1" class="btn btn-primary">View Case Studies</a>
+      <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-avatar">🎮</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">8+</div><div class="stat-label">Years in Games</div></div>
+    <div><div class="stat-num">12</div><div class="stat-label">Titles Shipped</div></div>
+    <div><div class="stat-num">5</div><div class="stat-label">Platform Launches</div></div>
+    <div><div class="stat-num">60+</div><div class="stat-label">Developers Led</div></div>
+  </div>
+</div>
+
+<!-- CASE STUDIES -->
+<div class="section-wrap">
+  <p class="section-label">Production Case Studies</p>
+  <h2 class="section-title">How I Think About Making Games</h2>
+  <p class="section-sub">Three artifacts that demonstrate game production craft — from AAA phase planning to sprint backlogs to a full vertical slice package.</p>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CASE 1: AAA Roadmap — God of War
+  ══════════════════════════════════════════════════════════ -->
+  <div class="case-card" id="case1">
+    <div class="case-header">
+      <div class="case-number">Case 01</div>
+      <div class="case-header-text">
+        <h2>AAA Game Production Breakdown</h2>
+        <p>A hypothetical production plan modeled on <em>God of War (2018)</em> — mapping each phase to what a producer actually owns and manages.</p>
+        <div class="case-meta-pills">
+          <span class="pill pill-blue">AAA Console</span>
+          <span class="pill pill-gray">Sony Santa Monica</span>
+          <span class="pill pill-gray">~4 Year Dev Cycle</span>
+          <span class="pill pill-gray">~200 Developers</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="roadmap">
+
+        <!-- CONCEPT -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Concept</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~3 months</div>
+                <h3>Concept Phase</h3>
+                <p>The team — led by creative director Cory Barlog — decides to reboot Kratos into Norse mythology, shifting from hack-and-slash to an intimate father-son story. Core experience pillars are defined: <em>single continuous camera shot, Kratos as a father, Norse world.</em></p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Pitching timeline to Sony Publishing — securing greenlight and initial budget</li>
+                    <li>Early headcount planning: who do we need in the room on day one?</li>
+                    <li>Facilitating creative alignment sessions; documenting decisions</li>
+                    <li>Setting up foundational tooling (source control, project management, communication channels)</li>
+                    <li>Identifying long-lead risks early: single-shot camera is unprecedented at scale</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRE-PRODUCTION -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Pre-production</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~6–9 months</div>
+                <h3>Pre-Production</h3>
+                <p>Core systems are designed on paper. Art direction is locked. Technology choices are validated. The team grows from ~30 to ~80 people. Key pillars like the Leviathan Axe, Norse realm structure, and Atreus's AI companion role are prototyped as proofs-of-concept.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Hiring plan execution — partnering with HR to staff up rapidly</li>
+                    <li>Master production schedule draft: mapping all disciplines against milestones</li>
+                    <li>Establishing Agile sprint cadence: 2-week sprints, weekly stakeholder standups</li>
+                    <li>Budget tracking and headcount forecasting with finance</li>
+                    <li>Setting milestone definitions: what does "pre-production done" actually mean?</li>
+                    <li>Vendor sourcing for outsourced art and QA pipelines</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VERTICAL SLICE -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Vertical Slice</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--green); border-color:var(--green-soft);"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~3–4 months</div>
+                <h3>Vertical Slice</h3>
+                <p>A polished, shippable-quality slice of the game — typically 20–30 minutes. For God of War, this would be the opening sequence: Kratos felling the tree, the Norse village, and the first combat encounter. The slice proves the game's vision is achievable. It goes to Sony for internal review.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Scope-locking the slice: ruthlessly cutting anything not essential to prove the vision</li>
+                    <li>Coordinating all-hands "slice sprints" with focused, cross-discipline teams</li>
+                    <li>Managing Sony Publishing review process: build delivery, feedback loops, turnaround</li>
+                    <li>Running postmortem on the slice: what took longer than estimated and why?</li>
+                    <li>Updating master schedule based on actual velocity data from slice development</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCTION -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Production</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~18–24 months</div>
+                <h3>Full Production</h3>
+                <p>The bulk of development. All nine Norse realms are built in parallel across discipline pods. Content pipelines are running at full capacity — level art, enemy design, narrative scripting, audio, and cinematics all happening simultaneously. Team peaks at ~180–200 people including outsource partners.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Running daily standups, weekly leads sync, and monthly milestone reviews</li>
+                    <li>Dependency tracking: Atreus animations can't be finalized until gameplay finishes tuning bow mechanics</li>
+                    <li>Managing outsource relationships: art vendors, co-development partners for QA</li>
+                    <li>Change-control process: creative wants to add a sixth realm — assessing schedule and budget impact</li>
+                    <li>Team health monitoring: watching for overload signals, managing sustainable pace</li>
+                    <li>Regular scope reviews: what can be cut, deferred to DLC, or shipped as a patch?</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALPHA -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Alpha</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--orange); border-color:var(--orange-soft);"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~3 months</div>
+                <h3>Alpha</h3>
+                <p>The game is playable from beginning to end with all core content in — but unpolished. Performance is inconsistent. Bugs are plentiful. Internal playtests ramp up. Feature freeze kicks in: no new features, only bug fixing and polish from here.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Enforcing feature freeze — fielding and declining late creative requests with data</li>
+                    <li>QA pipeline scale-up: coordinating internal and external QA teams</li>
+                    <li>Bug triage meetings: P1/P2/P3 classification, ownership assignment, daily burn-down</li>
+                    <li>Playtest scheduling and feedback collection — routing insights to correct disciplines</li>
+                    <li>Preparing Alpha milestone deliverable for Sony Publishing review</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BETA -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Beta</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--orange); border-color:var(--orange-soft);"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~6–8 weeks</div>
+                <h3>Beta</h3>
+                <p>Game is content-complete and polished. Focus shifts entirely to stability, performance optimization, and localization verification. First-party submission preparation begins. External press embargo content is assembled.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Daily P1/P2 bug counts — tracking burn-down against launch date</li>
+                    <li>Localization QA coordination (12 languages for God of War)</li>
+                    <li>Performance target sign-off: hitting 30fps lock on base PS4 and PS4 Pro targets</li>
+                    <li>Press kit and review asset delivery to marketing/communications team</li>
+                    <li>Launch readiness checklist: every department signs off on their criteria</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CERT -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Certification</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--red); border-color:var(--red-soft);"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">~4–6 weeks</div>
+                <h3>Certification (Cert)</h3>
+                <p>The game is submitted to Sony (TRC — Technical Requirements Checklist) for platform certification. A cert failure can cost 2–4 weeks. Rating submission (ESRB/PEGI) happens simultaneously. Manufacturing masters are prepared for physical distribution.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Submitting build to Sony certification team with full TRC documentation</li>
+                    <li>Managing cert failure response: fast-tracking fixes, coordinating resubmission</li>
+                    <li>ESRB/PEGI rating management — ensuring rating content is accurate and approved</li>
+                    <li>Go/no-go decision communication to executive stakeholders</li>
+                    <li>Day-0 patch planning: what fixes didn't make cert build that we ship day one?</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAUNCH -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Launch</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--green); border-color:var(--green-soft);"></div>
+                <div class="phase-line"></div>
+              </div>
+              <div class="phase-right" style="flex:1;">
+                <div class="phase-duration">Week of April 20, 2018</div>
+                <h3>Launch</h3>
+                <p>God of War ships globally. Review embargo lifts. The team is on call monitoring Metacritic, community forums, and crash telemetry. A launch war room coordinates real-time response to critical issues across engineering, QA, and customer support.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Launch war room: 24-hour monitoring of live telemetry, crash reports, community feedback</li>
+                    <li>Hot-fix prioritization: what breaks the experience for most players?</li>
+                    <li>Communication to Sony Publishing on launch metrics and status</li>
+                    <li>Team recognition: acknowledging the effort that got the game across the line</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST-LAUNCH -->
+        <div class="roadmap-phase">
+          <div class="phase-left">
+            <div class="phase-label">Post-Launch</div>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:flex-start;gap:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;padding-right:20px;">
+                <div class="phase-dot" style="background:var(--green); border-color:var(--green-soft);"></div>
+              </div>
+              <div class="phase-right" style="flex:1;padding-bottom:0;">
+                <div class="phase-duration">Ongoing</div>
+                <h3>Post-Launch &amp; Live Ops</h3>
+                <p>Patches, performance updates, New Game+ mode addition, and preparation for <em>God of War: Ragnarök</em>. The team conducts a full project postmortem. Lessons learned feed directly into the next title's production planning.</p>
+                <div class="producer-manages">
+                  <div class="producer-manages-label">Producer manages</div>
+                  <ul>
+                    <li>Post-launch patch cadence: routing player feedback into prioritized fix releases</li>
+                    <li>Managing team transition: who moves to next project vs. stays for post-launch?</li>
+                    <li>Full project postmortem: what went well, what to improve, what to stop doing</li>
+                    <li>Seeding the sequel's production plan with this project's learnings</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /roadmap -->
+    </div><!-- /case-body -->
+  </div><!-- /case-card -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       CASE 2: Sprint / Backlog
+  ══════════════════════════════════════════════════════════ -->
+  <div class="case-card" id="case2">
+    <div class="case-header">
+      <div class="case-number">Case 02</div>
+      <div class="case-header-text">
+        <h2>Sprint Backlog &amp; Team Structure</h2>
+        <p>A Jira-style sprint backlog for a hypothetical mid-size action-RPG team during Production Sprint 14 — Combat Systems focus.</p>
+        <div class="case-meta-pills">
+          <span class="pill pill-blue">Sprint 14 of 28</span>
+          <span class="pill pill-gray">2-Week Sprint</span>
+          <span class="pill pill-gray">13 Developers</span>
+          <span class="pill pill-gray">Action RPG</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+
+      <div class="team-grid">
+        <div class="team-member"><div class="team-role-icon">⚙️</div><div class="team-role-name">Gameplay Programmers</div><div class="team-role-count">×2</div></div>
+        <div class="team-member"><div class="team-role-icon">🎨</div><div class="team-role-name">Artists</div><div class="team-role-count">×4</div></div>
+        <div class="team-member"><div class="team-role-icon">🧩</div><div class="team-role-name">Game Designers</div><div class="team-role-count">×2</div></div>
+        <div class="team-member"><div class="team-role-icon">🖥️</div><div class="team-role-name">Tech Designer</div><div class="team-role-count">×1</div></div>
+        <div class="team-member"><div class="team-role-icon">🏃</div><div class="team-role-name">Animator</div><div class="team-role-count">×1</div></div>
+        <div class="team-member"><div class="team-role-icon">🔍</div><div class="team-role-name">QA Testers</div><div class="team-role-count">×2</div></div>
+        <div class="team-member"><div class="team-role-icon">📋</div><div class="team-role-name">Producer</div><div class="team-role-count">×1</div></div>
+        <div class="team-member" style="background:var(--accent-soft);border-color:var(--accent);">
+          <div class="team-role-icon">🎯</div>
+          <div class="team-role-name" style="color:var(--accent);">Sprint Goal</div>
+          <div class="team-role-count" style="color:var(--accent);">Combat feel shippable</div>
+        </div>
+      </div>
+
+      <div class="sprint-info">
+        <div class="sprint-stat"><div class="sprint-stat-label">Sprint</div><div class="sprint-stat-value">14 / 28</div></div>
+        <div class="sprint-stat"><div class="sprint-stat-label">Dates</div><div class="sprint-stat-value" style="font-size:14px;margin-top:3px;">Oct 7 – Oct 18</div></div>
+        <div class="sprint-stat"><div class="sprint-stat-label">Story Points</div><div class="sprint-stat-value">47 / 52 committed</div></div>
+      </div>
+
+      <div class="backlog-table-wrap">
+        <table class="backlog-table">
+          <thead>
+            <tr>
+              <th>Epic</th>
+              <th>Task</th>
+              <th>Owner</th>
+              <th>Points</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Blocker</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="epic-tag epic-combat">Combat</span></td>
+              <td>Melee attack prototype — light combo chain</td>
+              <td>Gameplay Eng #1</td>
+              <td>8</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-inprogress">In Progress</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-combat">Combat</span></td>
+              <td>Hit reactions — light / heavy differentiation</td>
+              <td>Animator</td>
+              <td>5</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-blocked">Blocked</span></td>
+              <td>Needs melee prototype complete</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-combat">Combat</span></td>
+              <td>Enemy stagger state machine</td>
+              <td>Tech Designer</td>
+              <td>5</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-inprogress">In Progress</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-combat">Combat</span></td>
+              <td>Camera shake + controller rumble on hit</td>
+              <td>Gameplay Eng #2</td>
+              <td>3</td>
+              <td><span class="priority-med">Med</span></td>
+              <td><span class="status-badge status-notstarted">Not Started</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-combat">Combat</span></td>
+              <td>Dodge roll — input window &amp; invincibility frames</td>
+              <td>Game Designer #1</td>
+              <td>5</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-review">In Review</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-ui">UI</span></td>
+              <td>Health bar — widget implementation</td>
+              <td>Game Designer #2</td>
+              <td>3</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-done">Done ✓</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-ui">UI</span></td>
+              <td>Stamina bar — drain &amp; regen animation</td>
+              <td>Artist #1</td>
+              <td>3</td>
+              <td><span class="priority-med">Med</span></td>
+              <td><span class="status-badge status-inprogress">In Progress</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-ui">UI</span></td>
+              <td>Damage number popups — font &amp; color pass</td>
+              <td>Artist #2</td>
+              <td>2</td>
+              <td><span class="priority-low">Low</span></td>
+              <td><span class="status-badge status-notstarted">Not Started</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-ai">AI</span></td>
+              <td>Enemy perception — sight cone &amp; alert states</td>
+              <td>Gameplay Eng #1</td>
+              <td>8</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-blocked">Blocked</span></td>
+              <td>Navigation mesh needs rebuild (Env team)</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-ai">AI</span></td>
+              <td>Enemy patrol behavior — waypoint system</td>
+              <td>Tech Designer</td>
+              <td>5</td>
+              <td><span class="priority-med">Med</span></td>
+              <td><span class="status-badge status-done">Done ✓</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-level">Level</span></td>
+              <td>Combat arena greybox — Zone 2 boss room</td>
+              <td>Artist #3 + #4</td>
+              <td>8</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-inprogress">In Progress</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-audio">Audio</span></td>
+              <td>Sword impact SFX — 3 variants implemented</td>
+              <td>Game Designer #1</td>
+              <td>2</td>
+              <td><span class="priority-med">Med</span></td>
+              <td><span class="status-badge status-done">Done ✓</span></td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td><span class="epic-tag epic-perf">Perf</span></td>
+              <td>Profile combat scene — identify frame spikes</td>
+              <td>Gameplay Eng #2</td>
+              <td>3</td>
+              <td><span class="priority-high">High</span></td>
+              <td><span class="status-badge status-notstarted">Not Started</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:24px;padding:18px;background:var(--accent-soft);border-radius:10px;border:1px solid rgba(39,131,222,0.2);">
+        <p style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px;">📌 Producer's Sprint Notes</p>
+        <p style="font-size:13px;color:var(--text);line-height:1.65;">Two active blockers this sprint. Hit reactions (Animator) are gated on melee prototype — tracking daily with Gameplay Eng #1; this is the critical path. AI perception block is owned by the Environment team's nav mesh rebuild, estimated to unblock by Day 5. If nav mesh slips past Day 6, I'll escalate to leads and pull in AI patrol polish as a swap task to keep the Animator and Tech Designer moving. Sprint capacity is at 47/52 — healthy buffer for the two blocked items to land mid-sprint.</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       CASE 3: Vertical Slice Production Plan
+  ══════════════════════════════════════════════════════════ -->
+  <div class="case-card" id="case3">
+    <div class="case-header">
+      <div class="case-number">Case 03</div>
+      <div class="case-header-text">
+        <h2>Vertical Slice Production Plan</h2>
+        <p>A full production package for a 15-minute stealth mission feature — modeled on an Assassin's Creed-style action-stealth game. The kind of document a producer owns and drives.</p>
+        <div class="case-meta-pills">
+          <span class="pill pill-blue">Lead Producer</span>
+          <span class="pill pill-gray">25 Developers</span>
+          <span class="pill pill-gray">Stealth Action Game</span>
+          <span class="pill pill-gray">12-Week Plan</span>
+        </div>
+      </div>
+    </div>
+    <div class="case-body">
+
+      <!-- FEATURE BRIEF + SCOPE -->
+      <div class="vs-grid" style="margin-bottom:28px;">
+        <div class="vs-block">
+          <h3>🗂 Feature Brief</h3>
+          <p style="margin-bottom:12px;"><strong>Feature:</strong> 15-Minute Stealth Infiltration Mission — "The Merchant's Vault"</p>
+          <p style="margin-bottom:12px;"><strong>Experience goal:</strong> Player feels like a ghost — stalking guards, using environmental hazards, and escaping without triggering full alert. The mission validates our core stealth loop before full production.</p>
+          <p style="margin-bottom:12px;"><strong>Success metric:</strong> 80% of playtesters complete without triggering full alarm; average time: 12–18 minutes.</p>
+          <p><strong>Stakeholder:</strong> Creative Director sign-off required at Greybox and Vertical Slice gate.</p>
+        </div>
+        <div class="vs-block">
+          <h3>📐 Scope</h3>
+          <ul>
+            <li>1 open-plan level (merchant district + vault interior)</li>
+            <li>1 new enemy archetype: Guard Captain with patrol AI</li>
+            <li>3 environmental kills (chandelier, barrel, trapdoor)</li>
+            <li>Stealth detection system: sight cones, sound propagation</li>
+            <li>2 narrative VO scenes (entry + extraction)</li>
+            <li>Greybox → Whitebox → Final Art pass</li>
+            <li>No new UI — reuse existing HUD systems</li>
+            <li><strong>Out of scope:</strong> Co-op, multiplayer, new weapons</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MILESTONES -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">🏁 Milestones</h3>
+      <div class="milestone-list" style="margin-bottom:32px;">
+        <div class="milestone-item">
+          <div class="milestone-date">Wk 2</div>
+          <div><div class="milestone-name">Greybox Complete</div><div class="milestone-desc">Playable level in grey geometry. Stealth detection rough-in. Internal playtest.</div></div>
+          <span class="pill pill-gray">Gate: CD Review</span>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-date">Wk 5</div>
+          <div><div class="milestone-name">Feature Complete</div><div class="milestone-desc">All gameplay systems implemented. Guard Captain AI, environmental kills, VO integrated.</div></div>
+          <span class="pill pill-blue">Gate: QA Intake</span>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-date">Wk 8</div>
+          <div><div class="milestone-name">Art Complete</div><div class="milestone-desc">Final art pass on level, characters, VFX, and lighting. Audio mix complete.</div></div>
+          <span class="pill pill-green">Gate: Polish Start</span>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-date">Wk 10</div>
+          <div><div class="milestone-name">Content Lock</div><div class="milestone-desc">No new content. Bug fixing and polish only. External playtest session.</div></div>
+          <span class="pill pill-orange">Gate: No new content</span>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-date">Wk 12</div>
+          <div><div class="milestone-name">Vertical Slice Delivery</div><div class="milestone-desc">Build delivered to Publishing. P1 bug count: 0. P2 bug count: &lt;5. Launch criteria met.</div></div>
+          <span class="pill pill-green">Gate: Publishing Sign-Off</span>
+        </div>
+      </div>
+
+      <!-- TEAM ALLOCATION -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">👥 Team Allocation (25 Developers)</h3>
+      <div class="allocation-grid" style="margin-bottom:32px;">
+        <div class="alloc-card"><div class="alloc-icon">⚙️</div><div class="alloc-discipline">Engineering</div><div class="alloc-count">5 devs<br/><span style="font-size:10px;">AI, systems, tools</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">🎨</div><div class="alloc-discipline">Environment Art</div><div class="alloc-count">6 devs<br/><span style="font-size:10px;">Level, props, lighting</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">🧩</div><div class="alloc-discipline">Design</div><div class="alloc-count">4 devs<br/><span style="font-size:10px;">Level, systems, UX</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">🏃</div><div class="alloc-discipline">Animation</div><div class="alloc-count">3 devs<br/><span style="font-size:10px;">Character, VFX</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">🔊</div><div class="alloc-discipline">Audio</div><div class="alloc-count">2 devs<br/><span style="font-size:10px;">SFX, music, VO</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">✍️</div><div class="alloc-discipline">Narrative</div><div class="alloc-count">1 dev<br/><span style="font-size:10px;">VO scripts, scene dir</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">🔍</div><div class="alloc-discipline">QA</div><div class="alloc-count">3 devs<br/><span style="font-size:10px;">Test, triage, metrics</span></div></div>
+        <div class="alloc-card"><div class="alloc-icon">📋</div><div class="alloc-discipline">Production</div><div class="alloc-count">1 dev<br/><span style="font-size:10px;">That's me</span></div></div>
+      </div>
+
+      <!-- RISK REGISTER -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">⚠️ Risk Register</h3>
+      <div class="risk-table-wrap" style="margin-bottom:32px;">
+        <table class="risk-table">
+          <thead>
+            <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Stealth AI complexity exceeds estimate</td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td><span class="pill pill-red">High</span></td>
+              <td>Timebox AI to Wk 3; fallback to simplified sight-only detection if pathfinding slips</td>
+            </tr>
+            <tr>
+              <td>Guard Captain animations run late</td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td>Rough-in with placeholder anims; final pass blocked on animation — parallel track</td>
+            </tr>
+            <tr>
+              <td>VO recording session delayed (talent scheduling)</td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td>Book studio 3 weeks early; have writer-placeholder audio for continued dev</td>
+            </tr>
+            <tr>
+              <td>Level art scope creep from CD feedback at Greybox gate</td>
+              <td><span class="pill pill-red">High</span></td>
+              <td><span class="pill pill-orange">Medium</span></td>
+              <td>Present scope doc at Wk 2 review; any additions require formal scope trade</td>
+            </tr>
+            <tr>
+              <td>Performance target miss on console (30fps)</td>
+              <td><span class="pill pill-gray">Low</span></td>
+              <td><span class="pill pill-red">High</span></td>
+              <td>Weekly performance profiling from Wk 3; engineering owns frame budget tracking</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SPRINT PLAN -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">🏃 Sprint Plan (6 × 2-Week Sprints)</h3>
+      <div class="sprint-table-wrap" style="margin-bottom:32px;">
+        <table class="sprint-table">
+          <thead>
+            <tr><th>Sprint</th><th>Weeks</th><th>Focus</th><th>Deliverable</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sprint 1</strong></td>
+              <td>Wk 1–2</td>
+              <td>Greybox level, rough AI sight system, detection HUD rough-in</td>
+              <td>Playable greybox — internal playtest + CD gate</td>
+            </tr>
+            <tr>
+              <td><strong>Sprint 2</strong></td>
+              <td>Wk 3–4</td>
+              <td>Guard Captain AI complete, environmental kill triggers, sound propagation</td>
+              <td>All systems functional (not polished)</td>
+            </tr>
+            <tr>
+              <td><strong>Sprint 3</strong></td>
+              <td>Wk 5–6</td>
+              <td>Feature complete: VO integrated, whitebox art pass, QA intake</td>
+              <td>Feature Complete build — QA begins full regression</td>
+            </tr>
+            <tr>
+              <td><strong>Sprint 4</strong></td>
+              <td>Wk 7–8</td>
+              <td>Final art, lighting, VFX, audio mix, P1/P2 bug burn</td>
+              <td>Art Complete build — external playtest</td>
+            </tr>
+            <tr>
+              <td><strong>Sprint 5</strong></td>
+              <td>Wk 9–10</td>
+              <td>Content lock, bug fixing, performance optimization, localization</td>
+              <td>Content Locked build — P1 count: 0 target</td>
+            </tr>
+            <tr>
+              <td><strong>Sprint 6</strong></td>
+              <td>Wk 11–12</td>
+              <td>Final polish, launch criteria verification, publishing review prep</td>
+              <td>✅ Vertical Slice Delivered to Publishing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- DEFINITION OF DONE -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">✅ Definition of Done</h3>
+      <div class="dod-grid" style="margin-bottom:32px;">
+        <div class="dod-block">
+          <h4>Gameplay</h4>
+          <ul>
+            <li>Stealth mission completable start to finish</li>
+            <li>All three environmental kills functional</li>
+            <li>Guard Captain AI passes all QA test cases</li>
+            <li>Detection system: zero false positives in 20-run regression</li>
+            <li>Zero P1 bugs. Fewer than 5 P2 bugs.</li>
+          </ul>
+        </div>
+        <div class="dod-block">
+          <h4>Art &amp; Audio</h4>
+          <ul>
+            <li>Final lighting pass approved by Art Director</li>
+            <li>All VO recorded and implemented</li>
+            <li>Audio mix signed off by Audio Director</li>
+            <li>No missing textures or geometry seams in final build</li>
+          </ul>
+        </div>
+        <div class="dod-block">
+          <h4>Performance</h4>
+          <ul>
+            <li>Stable 30fps on base console hardware</li>
+            <li>No hitches &gt;2 frames during gameplay</li>
+            <li>Load time under 8 seconds</li>
+          </ul>
+        </div>
+        <div class="dod-block">
+          <h4>Publishing</h4>
+          <ul>
+            <li>Creative Director final sign-off</li>
+            <li>Playtest success rate ≥80%</li>
+            <li>Build submitted to Publishing on schedule</li>
+            <li>Launch criteria doc signed by all leads</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BUG TRIAGE + CHANGE CONTROL -->
+      <h3 style="font-size:15px;font-weight:800;margin-bottom:16px;">🔧 Bug Triage &amp; Change Control</h3>
+      <div class="process-grid">
+        <div class="process-block">
+          <h4>Bug Triage Process</h4>
+          <div class="process-step"><div class="step-num">1</div><div class="step-text"><strong>Daily QA submission:</strong> Bugs logged in Jira by 10am with repro steps, severity, and build version.</div></div>
+          <div class="process-step"><div class="step-num">2</div><div class="step-text"><strong>Triage meeting (30 min, daily):</strong> Producer + QA Lead + discipline leads classify bugs: P1 (crash/blocker), P2 (breaks feature), P3 (polish), P4 (nice-to-have).</div></div>
+          <div class="process-step"><div class="step-num">3</div><div class="step-text"><strong>Assignment:</strong> P1s assigned immediately, due EOD. P2s assigned same day, due within sprint. P3/P4s queued for polish sprint.</div></div>
+          <div class="process-step"><div class="step-num">4</div><div class="step-text"><strong>Burn-down tracking:</strong> P1 and P2 counts tracked daily on the sprint dashboard. Escalate to leads if P1 count doesn't hit zero by content lock.</div></div>
+          <div class="process-step"><div class="step-num">5</div><div class="step-text"><strong>Fix verification:</strong> QA verifies all fixes in next available build within 24 hours of fix submission.</div></div>
+        </div>
+        <div class="process-block">
+          <h4>Change Control Process</h4>
+          <div class="process-step"><div class="step-num">1</div><div class="step-text"><strong>Change request submitted:</strong> Any scope change requires a written Change Request (CR) — what, why, and who's asking.</div></div>
+          <div class="process-step"><div class="step-num">2</div><div class="step-text"><strong>Impact assessment:</strong> Producer evaluates schedule, budget, and dependency impact within 48 hours.</div></div>
+          <div class="process-step"><div class="step-num">3</div><div class="step-text"><strong>Trade required:</strong> Every addition must be offset by a cut of equal scope. "Yes, and" only if there's headroom; otherwise "Yes, but we cut X."</div></div>
+          <div class="process-step"><div class="step-num">4</div><div class="step-text"><strong>Approval:</strong> CRs above 3 story points require Creative Director + Producer sign-off. All approved CRs are documented and communicated to the team.</div></div>
+          <div class="process-step"><div class="step-num">5</div><div class="step-text"><strong>Post-lock:</strong> After content lock (Wk 10), all CRs are automatically deferred to a post-launch patch unless they are P1 bugs.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /section-wrap -->
+
+<!-- SKILLS -->
+<div class="skills-bg">
+  <div class="section-wrap">
+    <p class="section-label">Expertise</p>
+    <h2 class="section-title">Skills &amp; Tools</h2>
+    <p class="section-sub">The production disciplines and tools I work with every day.</p>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-icon">🗂️</div>
+        <div class="skill-group-name">Production</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Agile / Scrum</span>
+          <span class="skill-pill">Milestone Planning</span>
+          <span class="skill-pill">Risk Management</span>
+          <span class="skill-pill">Vertical Slices</span>
+          <span class="skill-pill">Bug Triage</span>
+          <span class="skill-pill">Feature Freeze</span>
+          <span class="skill-pill">Postmortems</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-icon">🤝</div>
+        <div class="skill-group-name">Leadership</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Stakeholder Mgmt</span>
+          <span class="skill-pill">Cross-Functional</span>
+          <span class="skill-pill">Hiring</span>
+          <span class="skill-pill">Outsource Mgmt</span>
+          <span class="skill-pill">Change Control</span>
+          <span class="skill-pill">Scope Negotiation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-icon">🛠️</div>
+        <div class="skill-group-name">Tools &amp; Domains</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Jira</span>
+          <span class="skill-pill">Notion</span>
+          <span class="skill-pill">Hansoft</span>
+          <span class="skill-pill">Perforce</span>
+          <span class="skill-pill">Certification (TRC)</span>
+          <span class="skill-pill">Live Service</span>
+          <span class="skill-pill">Console + PC + Mobile</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-wrap">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Let's talk games.</h2>
+  <p class="section-sub">Open to producer and PM opportunities, consulting, and speaking.</p>
+  <div class="contact-links">
+    <a href="mailto:blake.latunski@gmail.com" class="btn btn-primary">blake.latunski@gmail.com</a>
+    <a href="#" class="btn btn-secondary">LinkedIn</a>
+    <a href="#" class="btn btn-secondary">Resume</a>
+  </div>
+</div>
+
+<footer>© 2026 Blake Latunski · Game Producer & Project Manager</footer>
+
+</body>
+</html>
